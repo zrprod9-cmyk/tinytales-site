@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TinyTales — Animated Stories for Kids</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(180deg, #87CEEB 0%, #E0F4FF 40%, #C8F5C8 70%, #8BC34A 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Floating clouds */
+        .clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50px;
+            opacity: 0.8;
+            animation: float linear infinite;
+        }
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+        }
+        .cloud:nth-child(1) { width: 120px; height: 40px; top: 40px; animation-duration: 25s; }
+        .cloud:nth-child(1)::before { width: 50px; height: 50px; top: -25px; left: 20px; }
+        .cloud:nth-child(1)::after { width: 70px; height: 60px; top: -30px; left: 50px; }
+        
+        .cloud:nth-child(2) { width: 160px; height: 50px; top: 100px; animation-duration: 35s; animation-delay: -10s; }
+        .cloud:nth-child(2)::before { width: 60px; height: 60px; top: -30px; left: 30px; }
+        .cloud:nth-child(2)::after { width: 80px; height: 70px; top: -35px; left: 70px; }
+        
+        .cloud:nth-child(3) { width: 100px; height: 35px; top: 60px; animation-duration: 30s; animation-delay: -20s; }
+        .cloud:nth-child(3)::before { width: 40px; height: 40px; top: -20px; left: 15px; }
+        .cloud:nth-child(3)::after { width: 55px; height: 50px; top: -25px; left: 40px; }
+        
+        @keyframes float {
+            from { left: -200px; }
+            to { left: calc(100% + 200px); }
+        }
+        
+        /* Sun */
+        .sun {
+            position: fixed;
+            top: 30px;
+            right: 60px;
+            width: 80px;
+            height: 80px;
+            background: #FFD93D;
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(255, 217, 61, 0.6);
+            z-index: 0;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        .sun::after {
+            content: '😊';
+            font-size: 40px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            width: 200px;
+            height: 200px;
+            border-radius: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
+            animation: bounceIn 1s ease-out;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+        }
+        h1 span:first-child { color: #FF6B6B; }
+        h1 span:last-child { color: #4ECDC4; }
+        
+        .tagline {
+            font-size: 1.4em;
+            color: #5D4037;
+            margin-bottom: 40px;
+            font-weight: 700;
+        }
+        
+        .cards {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px 25px;
+            width: 220px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card-emoji { font-size: 3em; margin-bottom: 15px; }
+        .card h3 { color: #333; font-size: 1.1em; margin-bottom: 8px; }
+        .card p { color: #777; font-size: 0.9em; line-height: 1.4; }
+        
+        .social {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        .social a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .social a:hover { transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .btn-yt { background: #FF0000; }
+        .btn-tt { background: #000000; }
+        .btn-ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        
+        .footer {
+            margin-top: 60px;
+            padding: 30px;
+            color: #5D4037;
+            font-size: 0.85em;
+        }
+        .footer a { color: #5D4037; text-decoration: underline; }
+        
+        /* Grass */
+        .grass {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: #4CAF50;
+            z-index: 0;
+            border-radius: 100% 100% 0 0 / 30px 30px 0 0;
+        }
+        
+        /* Flowers */
+        .flowers {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            z-index: 0;
+            pointer-events: none;
+            font-size: 1.5em;
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5em; }
+            .tagline { font-size: 1.1em; }
+            .cards { flex-direction: column; align-items: center; }
+            .social { flex-direction: column; align-items: center; }
+            .sun { width: 50px; height: 50px; right: 20px; top: 15px; }
+            .sun::after { font-size: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="clouds">
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+    </div>
+    <div class="sun"></div>
+    <div class="grass"></div>
+    <div class="flowers">
+        <span>🌸</span><span>🌻</span><span>🌷</span><span>🌼</span><span>🌸</span><span>🌻</span><span>🌷</span>
+    </div>
+    
+    <div class="container">
+        <img src="logo.png" alt="TinyTales Logo" class="logo">
+        <h1><span>Tiny</span><span>Tales</span></h1>
+        <p class="tagline">✨ Magical animated stories for little dreamers ✨</p>
+        
+        <div class="cards">
+            <div class="card">
+                <div class="card-emoji">📖</div>
+                <h3>Original Stories</h3>
+                <p>New adventures every day with lovable animal characters</p>
+            </div>
+            <div class="card">
+                <div class="card-emoji">🎨</div>
+                <h3>Beautiful Animation</h3>
+                <p>Colorful, gentle visuals perfect for young viewers</p>
+            </div>
+            <div class="card">
+                <div class="card-emoji">💡</div>
+                <h3>Fun Lessons</h3>
+                <p>Kindness, sharing, courage — wrapped in fun stories</p>
+            </div>
+        </div>
+        
+        <div class="social">
+            <a href="#" class="btn-yt">▶ YouTube</a>
+            <a href="#" class="btn-tt">♪ TikTok</a>
+            <a href="#" class="btn-ig">📷 Instagram</a>
+        </div>
+        
+        <div class="footer">
+            <p>© 2026 TinyTales. Made with ❤️ for kids everywhere.</p>
+            <p style="margin-top: 10px;">
+                <a href="terms.html">Terms of Service</a> · 
+                <a href="privacy.html">Privacy Policy</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
